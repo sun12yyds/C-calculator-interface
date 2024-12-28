@@ -14,95 +14,95 @@
 # 02、计算器功能实现
 进行算术运算时，之前输入的左操作数和操作符需存储（右操作数可直接从文本框 lineEdit_Input 中读取），因此在自定义窗口 Widget 类中添加私有数据成员如下：
 
-QString operandStr1; //用于存储字符串形式的左操作数
+     QString operandStr1; //用于存储字符串形式的左操作数
 
-QString operatorStr; //用于存储操作符
+     QString operatorStr; //用于存储操作符
 
 并在 Widget 类的构造函数体中添加如下语句以将它们初始化为空串：
 
-operandStr1="";
+     operandStr1="";
 
-operatorStr="";
+     operatorStr="";
 接下来实现点击各个按钮时触发的功能：给每个按钮的 clicked()信号都添加自关联槽。以按钮 1 为例，自关联槽实现代码如下：
 
 
-void Widget::on_btn_1_clicked()
+     void Widget::on_btn_1_clicked()
 
-{
+     {
 
-  ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+"1");
+       ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+"1");
 
-}
+     }
 按钮 2 到 9 的功能实现和按钮 1 是类似的，只需把上述代码中的字符"1"改成对应的数字字符即可。对于按钮 0，由于一般不会出现诸如“00”形式的数字“0”，因此代码中对这种情况进行了处理，自关联槽定义如下：
 
-void Widget::on_btn_0_clicked()
+     void Widget::on_btn_0_clicked()
 
-{
+     {
 
-if(ui->lineEdit_Input->text()!="0")
+     if(ui->lineEdit_Input->text()!="0")
 
-ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+"0");
+     ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+"0");
 
-}
+     }
 小数点按钮需要考虑按下时前面没有数字的情形（此时默认为整数部分为 0）、按下时串中已有了小数点的情形，最终自关联槽定义如下：
 
-void Widget::on_btn_Point_clicked()
+     void Widget::on_btn_Point_clicked()
 
-{
+     {
 
-if(ui->lineEdit_Input->text()=="")
+     if(ui->lineEdit_Input->text()=="")
 
-ui->lineEdit_Input->setText("0.")
-;
-else if(ui->lineEdit_Input->text().contains(".")==true)
+     ui->lineEdit_Input->setText("0.")
+     ;
+     else if(ui->lineEdit_Input->text().contains(".")==true)
 
-; //数字串中已有小数点，不能再输入
+     ; //数字串中已有小数点，不能再输入
 
-else
+     else
 
-ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+".");
-}
+     ui->lineEdit_Input->setText(ui->lineEdit_Input->text()+".");
+     }
 
 clear 按钮点击时，只需将文本框 lineEdit_Input 中的内容清空即可，代码如下：
 
 
-void Widget::on_btn_clear_clicked()
+     void Widget::on_btn_clear_clicked()
 
-{
+     {
 
-ui->lineEdit_Input->clear();
+     ui->lineEdit_Input->clear();
 
-}
+     }
 
 加、减、乘、除按钮的实现是类似的。以加法按钮为例：分情况进行处理，如果按下时文本框中 lineEdit_Input 是空串则不进行任何处理直接结束；否则说明用户提供了一个操作数，接下来判断它是左操作数还是右操作数；若 operandStr1 为空说明文本框中是左操作数，将其存储到 operandStr1、将运算符“+”存储到 operatorStr、将文本框清空以待用户再次输入右操作数、将已输入的内容显示于文本框 lineEdit_Show 中；若 operandStr1 不为空说明文本框中已是右操作数，此时按下加号和按下等号作用是相同的，直接调用点击等号按钮关联的槽函数 on_btn_Calc_clicked 进行处理即可。实现代码如下：
 
-void Widget::on_btn_Add_clicked()
+     void Widget::on_btn_Add_clicked()
 
-{
+     {
 
-if(ui->lineEdit_Input->text()=="") //没有输入数据
+     if(ui->lineEdit_Input->text()=="") //没有输入数据
 
-return;
+     return;
 
-else if(operandStr1=="") //没有左操作数
+     else if(operandStr1=="") //没有左操作数
 
-{
+     {
 
-operandStr1=ui->lineEdit_Input->text();
+     operandStr1=ui->lineEdit_Input->text();
 
-operatorStr="+";
+     operatorStr="+";
 
-ui->lineEdit_Input->clear();//输入文本框清空，以待输右操作数
+     ui->lineEdit_Input->clear();//输入文本框清空，以待输右操作数
 
-ui->lineEdit_Show->setText(operandStr1+operatorStr);
+     ui->lineEdit_Show->setText(operandStr1+operatorStr);
+     
+     }
 
-}
+     else
 
-else
+     on_btn_Calc_clicked();
 
-on_btn_Calc_clicked();
-
-}
+     }
 
 其它三个运算符的实现是一样的，只需将上述代码中赋值给 operatorStr 的字符串改成相应的运算符即可。
 
