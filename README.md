@@ -108,59 +108,59 @@ clear 按钮点击时，只需将文本框 lineEdit_Input 中的内容清空即�
 
 最后是等号按钮的实现，代码如下：
 
-void Widget::on_btn_Calc_clicked()
+     void Widget::on_btn_Calc_clicked()
 
-  {
+       {
   
-if(operandStr1!=""&&ui->lineEdit_Input->text()!=""&&operatorStr!="")
+     if(operandStr1!=""&&ui->lineEdit_Input->text()!=""&&operatorStr!="")
 
-{
+     {
 
-  double result;
+       double result;
   
-  double operand1=operandStr1.toDouble();
+       double operand1=operandStr1.toDouble();
   
-  double operand2=ui->lineEdit_Input->text().toDouble();
+       double operand2=ui->lineEdit_Input->text().toDouble();
   
-  if(operatorStr=="+")
+       if(operatorStr=="+")
   
-  result=operand1+operand2;
+       result=operand1+operand2;
   
-  else if(operatorStr=="-")
+       else if(operatorStr=="-")
   
-  result=operand1-operand2;
+       result=operand1-operand2;
   
-  else if(operatorStr=="*")
+       else if(operatorStr=="*")
   
-  result=operand1*operand2;
+       result=operand1*operand2;
   
-  else if(operatorStr=="/")
+       else if(operatorStr=="/")
   
-  if(operand2!=0.0)
+       if(operand2!=0.0)
   
-  result=operand1/operand2;
+       result=operand1/operand2;
   
-  else
+       else
   
-  {
+       {
   
-  QMessageBox::warning(this,"提示","除数不能为零");
+       QMessageBox::warning(this,"提示","除数不能为零");
   
-  result=0;
+       result=0;
   
-  }
+       }
   
-  ui->lineEdit_Show->setText(QString::number(result));
+       ui->lineEdit_Show->setText(QString::number(result));
   
-  operandStr1=""; //计算完毕，操作数清空
+       operandStr1=""; //计算完毕，操作数清空
+       
+       operatorStr=""; //计算完毕，操作符清空
+       
+       ui->lineEdit_Input->clear(); //计算完毕，数据输入文本框清空
   
-  operatorStr=""; //计算完毕，操作符清空
-  
-  ui->lineEdit_Input->clear(); //计算完毕，数据输入文本框清空
-  
-    }
+         }     
     
-}
+     }
 
 
 
@@ -216,33 +216,33 @@ if(operandStr1!=""&&ui->lineEdit_Input->text()!=""&&operatorStr!="")
 # 04、登陆功能的实现
 首先给登陆对话框类添加一个信号，在类定义中(logindialog.h 文件)添加代码如下：
 
-signals:
+     signals:
 
-void LoggedIn();
+     void LoggedIn();
 
 然后给“登陆”按钮的 clicked()信号添加自关联槽，代码实现如下：
 
 
-void LoginDialog::on_loginBtn_clicked()
+     void LoginDialog::on_loginBtn_clicked()
 
-{
-if(ui->userEdit->text()=="admin"&&ui->pwdEdit->text()=="123456")
+     {
+     if(ui->userEdit->text()=="admin"&&ui->pwdEdit->text()=="123456")
 
-{
+     {
 
-emit(LoggedIn());
+     emit(LoggedIn());
 
-hide(); //隐藏登陆窗口
+     hide(); //隐藏登陆窗口
 
-}
+     }
 
-else
+     else
 
-QMessageBox::information(this, "提示",
+     QMessageBox::information(this, "提示",
 
-                            "用户名和密码错误");
+                                 "用户名和密码错误");
                             
-}
+     }
 
 
 
@@ -251,35 +251,35 @@ QMessageBox::information(this, "提示",
 
 在 logindialog.cpp 文件中还需添加如下头文件：
 
-#include<QMessageBox>
+     #include<QMessageBox>
 
 为了实现先显示登陆界面，成功后再显示计算器界面的操作，以及将登陆对话框发射的 LoggedIn 信号和计算器窗口的显示槽函数 show 进行关联，主函数也需要进行修改，代码如下:
 
-#include "widget.h"
+     #include "widget.h"
 
-#include <QApplication>
+     #include <QApplication>
 
-#include "logindialog.h"
+     #include "logindialog.h"
 
  
-int main(int argc, char *argv[])
+     int main(int argc, char *argv[])
 
-{
+     {
 
-    QApplication a(argc, argv);
+         QApplication a(argc, argv);
     
  
-Widgetw;
+     Widgetw;
 
-    LoginDialog login(&w);
+         LoginDialog login(&w);
     
-    login.show();
+         login.show();
     
-    QObject::connect(&login,SIGNAL(LoggedIn()),&w,SLOT(show()));
+         QObject::connect(&login,SIGNAL(LoggedIn()),&w,SLOT(show()));
     
  
-    return a.exec();
-}
+         return a.exec();
+     }
 
 
 运行时，首先会显示出图 7 所示的登陆界面。在输入正确的用户名和密码、并按下登陆按钮后，才打开图 1 的界面。
